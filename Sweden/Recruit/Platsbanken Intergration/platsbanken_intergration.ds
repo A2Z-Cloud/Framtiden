@@ -1,0 +1,254 @@
+
+//fetch job details and set variables
+job = zoho.recruit.getRecordById("JobOpenings",ID);
+//This will set whether its a publish update or delete - Publish or Update = "active", Delete = "inactive"
+record_update = "active";
+//
+street_address = job.get("Besöksadress");
+postal_code = job.get("Postnr.");
+start_date = job.get("Job Start Date");
+end_date = job.get("Job End Date");
+contact_email = job.get("E-post kontaktperson");
+job_position_title = job.get("Posting Title");
+job_description = job.get("Job Description");
+if(job_description == null)
+{
+	job_description = "Job Description: ";
+}
+//Formatting for job description for xml
+job_description = job_description.replaceAll("<br />","&#xA;");
+job_description = job_description.replaceAll("&#xA;&#xA;","&#xA;");
+//info job_description;
+job_description = job_description.replaceAll("<(.|\n)*?>","").replaceAll("&nbsp;"," ");
+compulsory_demands = job.get("Compulsory demands");
+if(compulsory_demands == null)
+{
+	compulsory_demands = "Compulsory demands: ";
+}
+compulsory_demands = compulsory_demands.replaceAll("<(.|\n)*?>","").replaceAll("&nbsp;"," ");
+alternative_demands = job.get("Alternative demands");
+if(alternative_demands == null)
+{
+	alternative_demands = "Alternative demands: ";
+}
+alternative_demands = alternative_demands.replaceAll("<(.|\n)*?>","").replaceAll("&nbsp;"," ");
+personal_characteristics = job.get("Personal characteristics");
+if(personal_characteristics == null)
+{
+	personal_characteristics = "Personal Characteristics: ";
+}
+personal_characteristics = personal_characteristics.replaceAll("<(.|\n)*?>","").replaceAll("&nbsp;"," ").replaceAll("&amp;","&");
+//info job_description;
+municipality = job.get("Kommun/Municipality");
+degree_of_service = job.get("Number of hours") + " Timmar";
+years_experience = job.get("Years of Experience");
+number_positions = job.get("Number of Positions");
+number_of_hours = job.get("Number of hours");
+job_type = job.get("Job Type");
+job_type_summary = job.get("Anställningsform");
+application_url = job.get("Application URL");
+job_identifier = job.get("Job Opening ID");
+contact_name = job.get("Account Manager");
+experience_required = job.get("Years of Experience1");
+occupation_id = job.get("Occupation group");
+salary_type = job.get("Salary type");
+// map for multiplicity codes
+mul_map = {"Ale":"1440","Alingsås":"1489","Alvesta":"0764","Aneby":"0604","Arboga":"1984","Arjeplog":"2506","Arvidsjaur":"2505","Arvika":"1784","Askersund":"1882","Avesta":"2084","Bengtsfors":"1460","Berg":"2326","Bjurholm":"2403","Bjuv":"1260","Boden":"2582","Bollebygd":"1443","Bollnäs":"2183","Borgholm":"0885","Borlänge":"2081","Borås":"1490","Botkyrka":"0127","Boxholm":"0560","Bromölla":"1272","Bräcke":"230","Burlöv":"1231","Båstad":"1278","Dals-Ed":"1438","Danderyd":"0162","Degerfors":"1862","Dorotea":"2425","Eda":"1730","Ekerö":"0125","Eksjö":"0686","Emmaboda":"0862","Enköping":"0381","Eskilstuna":"0484","Eslöv":"1285","Essunga":"1445","Fagersta":"1982","Falkenberg":"1382","Falköping":"1499","Falun":"2080","Filipstad":"1782","Finspång":"0562","Flen":"0482","Forshaga":"1763","Färgelanda":"1439","Gagnef":"2026","Gislaved":"0662","Gnesta":"0461","Gnosjö":"0617","Gotland":"0980","Grums":"1764","Grästorp":"1444","Gullspång":"1447","Gällivare":"2523","Gävle":"2180","Göteborg":"1480","Götene":"1471","Habo":"0643","Hagfors":"1783","Hallsberg":"1861","Hallstahammar":"1961","Halmstad":"1380","Hammarö":"1761","Haninge":"0136","Haparanda":"2583","Heby":"0331","Hedemora":"2083","Helsingborg":"1283","Herrljunga":"1466","Hjo":"1497","Hofors":"2104","Huddinge":"0126","Hudiksvall":"2184","Hultsfred":"0860","Hylte":"1315","Håbo":"0305","Hällefors":"1863","Härjedalen":"2361","Härnösand":"2280","Härryda":"1401","Hässleholm":"1293","Höganäs":"1284","Högsby":"0821","Hörby":"1266","Höör":"1267","Jokkmokk":"2510","Järfälla":"0123","Jönköping":"0680","Kalix":"2514","Kalmar":"0880","Karlsborg":"1446","Karlshamn":"1082","Karlskoga":"1883","Karlskrona":"1080","Karlstad":"1780","Katrineholm":"0483","Kil":"1715","Kinda":"0513","Kiruna":"2584","Klippan":"1276","Knivsta":"0330","Kramfors":"2282","Kristianstad":"1290","Kristinehamn":"1781","Krokom":"2309","Kumla":"1881","Kungsbacka":"1384","Kungsör":"1960","Kungälv":"1482","Kävlinge":"1261","Köping":"1983","Laholm":"1381","Landskrona":"1282","Laxå":"1860","Lekeberg":"1814","Leksand":"2029","Lerum":"1441","Lessebo":"0761","Lidingö":"0186","Lidköping":"1494","Lilla Edet":"1462","Lindesberg":"1885","Linköping":"0580","Ljungby":"0781","Ljusdal":"2161","Ljusnarsberg":"1864","Lomma":"1262","Ludvika":"2085","Luleå":"2580","Lund":"1281","Lycksele":"2481","Lysekil":"1484","Malmö":"1280","Malung":"2023","Malå":"2418","Mariestad":"1493","Mark":"1463","Markaryd":"0767","Mellerud":"1461","Mjölby":"0586","Mora":"2062","Motala":"0583","Mullsjö":"0642","Munkedal":"1430","Munkfors":"1762","Mölndal":"1481","Mönsterås":"0861","Mörbylånga":"0840","Nacka":"0182","Nora":"1884","Norberg":"1962","Nordanstig":"2132","Nordmaling":"2401","Norrköping":"0581","Norrtälje":"0188","Norsjö":"2417","Nybro":"0881","Nykvarn":"0140","Nyköping":"0480","Nynäshamn":"0192","Nässjö":"0682","Ockelbo":"2101","Olofström":"1060","Orsa":"2034","Orust":"1421","Osby":"1273","Oskarshamn":"0882","Ovanåker":"2121","Oxelösund":"0481","Pajala":"2521","Partille":"1402","Perstorp":"1275","Piteå":"2581","Ragunda":"2303","Robertsfors":"2409","Ronneby":"1081","Rättvik":"2031","Sala":"1981","Salem":"0128","Sandviken":"2181","Sigtuna":"0191","Simrishamn":"1291","Sjöbo":"1265","Skara":"1495","Skellefteå":"2482","Skinnskatteberg":"1904","Skurup":"1264","Skövde":"1496","Smedjebacken":"2061","Sollefteå":"2283","Sollentuna":"0163","Solna":"0184","Sorsele":"2422","Sotenäs":"1427","Staffanstorp":"1230","Stenungsund":"1415","Stockholm":"0180","Storfors":"1760","Storuman":"2421","Strängnäs":"0486","Strömstad":"1486","Strömsund":"2313","Sundbyberg":"0183","Sundsvall":"2281","Sunne":"1766","Surahammar":"1907","Svalöv":"1214","Svedala":"1263","Svenljunga":"1465","Säffle":"1785","Säter":"2082","Sävsjö":"0684","Söderhamn":"2182","Söderköping":"0582","Södertälje":"0181","Sölvesborg":"1083","Tanum":"1435","Tibro":"1472","Tidaholm":"1498","Tierp":"0360","Timrå":"2262","Tingsryd":"0763","Tjörn":"1419","Tomelilla":"1270","Torsby":"1737","Torsås":"0834","Tranemo":"1452","Tranås":"0687","Trelleborg":"1287","Trollhättan":"1488","Trosa":"0488","Tyresö":"0138","Täby":"0160","Töreboda":"1473","Uddevalla":"1485","Ulricehamn":"1491","Umeå":"2480","Upplands Väsby":"0114","Upplands-Bro":"0139","Uppsala":"0380","Uppvidinge":"0760","Vadstena":"0584","Vaggeryd":"0665","Valdemarsvik":"0563","Vallentuna":"0115","Vansbro":"2021","Vara":"1470","Varberg":"1383","Vaxholm":"0187","Vellinge":"1233","Vetlanda":"0685","Vilhelmina":"2462","Vimmerby":"0884","Vindeln":"2404","Vingåker":"0428","Vårgårda":"1442","Vänersborg":"1487","Vännäs":"2460","Värmdö":"0120","Värnamo":"0683","Västervik":"0883","Västerås":"1980","Växjö":"0780","Ydre":"0512","Ystad":"1286","Åmål":"1492","Ånge":"2260","Åre":"2321","Årjäng":"1765","Åsele":"2463","Åstorp":"1277","Åtvidaberg":"0561","Älmhult":"0765","Älvdalen":"2039","Älvkarleby":"0319","Älvsbyn":"2560","Ängelholm":"1292","Öckerö":"1407","Ödeshög":"0509","Örebro":"1880","Örkelljunga":"1257","Örnsköldsvik":"2284","Östersund":"2380","Österåker":"0117","Östhammar":"0382","Östra Göinge":"1256","Överkalix":"2513","Övertorneå":"2518"};
+//assign variables and format
+start_date = start_date.toDate("yyyy-MM-dd");
+start_date = start_date.toString("yyyy-MM-dd");
+end_date = end_date.toDate("yyyy-MM-dd");
+end_date = end_date.toString("yyyy-MM-dd");
+job_id = job_identifier;
+sender_email = "Platsbanken@framtiden.com";
+//Job posting id countrycode-orgide-xxxxxx -46-556686-5142-xxxxxx
+job_posting_id = "46-556686-5142-" + job_id;
+hiring_org_name = "Framtiden AB";
+hiring_org_id = "46-556686-5142";
+hiring_org_id_owner = "20342604";
+website = "http://www.framtiden.com";
+postal_country_code = "SE";
+postal_post_code = "55320";
+postal_region = "Jönköping";
+delivery_street_address = "Borgmästargränd 1D";
+start_date = start_date.toString();
+end_date = end_date.toString();
+contact_email = contact_email;
+job_position_title = job_position_title.replaceAll("&","");
+job_position_purpose = job_description.replaceAll("&","&amp;").replaceAll("<br />"," &#xA;");
+job_requirements = "Compulsory Requirements: " + compulsory_demands.replaceAll("&","&amp;") + "Alternative Requirements: " + alternative_demands.replaceAll("&","&amp;") + "Personal Characteristics: " + personal_characteristics.replaceAll("&","&amp;");
+job_location_country_code = "SE";
+job_location_post_code = "55320";
+job_location_municipality = "Jönköping";
+job_location_street_address = "Borgmästargränd 1D";
+location_summary_municipality_code = mul_map.get(municipality);
+location_summary_country_code = "SE";
+duration_text = degree_of_service;
+salary_currency = "SEK";
+salary_monthly = "1";
+if(salary_type == "Fixed salary")
+{
+	salary_text = "Fast lön";
+}
+else if(salary_type == "Fixed plus Comission")
+{
+	salary_text = "Fast & rörlig";
+}
+else if(salary_type == "Fixed plus Comission")
+{
+	salary_text = "Comission only";
+}
+//salary_text = "Fixed Salary";
+if(experience_required = "Experience not required")
+{
+	years_of_experince = "1";
+}
+if(experience_required = "Experience is required")
+{
+	years_of_experince = "4";
+}
+no_of_positions = number_positions;
+contact_formatted_name = contact_name;
+last_date_application = end_date;
+application_reference = job_id;
+hours_per_week = number_of_hours;
+//schedule choice = type choice between FullTime  or PartTime
+schedule_choice = job_type;
+if(schedule_choice == "Full Time" || schedule_choice == "Tillsvidare" || schedule_choice == "Full time" || schedule_choice == "Full-Time")
+{
+	schedule = "<FullTime><HoursPerWeek>" + hours_per_week + "</HoursPerWeek></FullTime>";
+}
+if(schedule_choice == "Part Time" || schedule_choice == "PartTime" || schedule_choice == "Part time")
+{
+	schedule = "<PartTime><HoursPerWeek>" + hours_per_week + "</HoursPerWeek></PartTime>";
+}
+if(application_url = null)
+{
+	application_url = "";
+}
+//job_type =
+// 	//
+// 	Build Xml Request
+xml_variables = "";
+xml_variables = xml_variables + "<Envelope xmlns=\"http://arbetsformedlingen.se/LedigtArbete\" version=\"0.52\"><Sender id=\"20342604\" email=\"" + sender_email + "\"/>";
+xml_variables = xml_variables + "<TransactInfo><TransactId/></TransactInfo>";
+xml_variables = xml_variables + "<Packet>";
+xml_variables = xml_variables + "<PacketInfo>";
+xml_variables = xml_variables + "<PacketId>1</PacketId>";
+xml_variables = xml_variables + "</PacketInfo>";
+xml_variables = xml_variables + "<Payload>";
+xml_variables = xml_variables + "<JobPositionPosting status=\"" + record_update + "\">";
+xml_variables = xml_variables + "<JobPositionPostingId>" + job_posting_id + "</JobPositionPostingId>";
+xml_variables = xml_variables + "<HiringOrg>";
+xml_variables = xml_variables + "<HiringOrgName>" + hiring_org_name + "</HiringOrgName>";
+xml_variables = xml_variables + "<HiringOrgId idOwner=\"" + hiring_org_id_owner + "\">" + hiring_org_id + "</HiringOrgId>";
+xml_variables = xml_variables + "<WebSite>" + website + "</WebSite>";
+xml_variables = xml_variables + "<Contact>";
+xml_variables = xml_variables + "<PostalAddress>";
+xml_variables = xml_variables + "<CountryCode>" + postal_country_code + "</CountryCode>";
+xml_variables = xml_variables + "<PostalCode>" + postal_post_code + "</PostalCode>";
+xml_variables = xml_variables + "<Region>" + postal_region + "</Region>";
+xml_variables = xml_variables + "<DeliveryAddress>";
+xml_variables = xml_variables + "<StreetName>" + delivery_street_address + "</StreetName>";
+xml_variables = xml_variables + "</DeliveryAddress>";
+xml_variables = xml_variables + "</PostalAddress>";
+xml_variables = xml_variables + "</Contact>";
+xml_variables = xml_variables + "</HiringOrg>";
+xml_variables = xml_variables + "<PostDetail>";
+xml_variables = xml_variables + "<StartDate>";
+xml_variables = xml_variables + "<Date>" + start_date + "</Date>";
+xml_variables = xml_variables + "</StartDate>";
+xml_variables = xml_variables + "<EndDate>";
+xml_variables = xml_variables + "<Date>" + end_date + "</Date>";
+xml_variables = xml_variables + "</EndDate>";
+xml_variables = xml_variables + "<PostedBy>";
+xml_variables = xml_variables + "<Contact>";
+xml_variables = xml_variables + "<E-mail>" + contact_email + "</E-mail>";
+xml_variables = xml_variables + "</Contact>";
+xml_variables = xml_variables + "</PostedBy>";
+xml_variables = xml_variables + "</PostDetail>";
+xml_variables = xml_variables + "<JobPositionInformation>";
+xml_variables = xml_variables + "<JobPositionTitle>" + job_position_title + "</JobPositionTitle>";
+xml_variables = xml_variables + "<JobPositionDescription>";
+xml_variables = xml_variables + "<JobPositionPurpose>" + job_position_purpose;
+xml_variables = xml_variables + "</JobPositionPurpose>";
+xml_variables = xml_variables + "<JobPositionLocation>";
+xml_variables = xml_variables + "<PostalAddress>";
+xml_variables = xml_variables + "<CountryCode>" + job_location_country_code + "</CountryCode>";
+xml_variables = xml_variables + "<PostalCode>" + job_location_post_code + "</PostalCode>";
+xml_variables = xml_variables + "<Municipality>" + job_location_municipality + "</Municipality>";
+xml_variables = xml_variables + "<DeliveryAddress>";
+xml_variables = xml_variables + "<AddressLine>" + job_location_street_address + "</AddressLine>";
+xml_variables = xml_variables + "<StreetName>" + job_location_street_address + "</StreetName>";
+xml_variables = xml_variables + "</DeliveryAddress>";
+xml_variables = xml_variables + "</PostalAddress>";
+xml_variables = xml_variables + "<LocationSummary>";
+xml_variables = xml_variables + "<Municipality>" + location_summary_municipality_code + "</Municipality>";
+xml_variables = xml_variables + "<CountryCode>" + location_summary_country_code + "</CountryCode>";
+xml_variables = xml_variables + "</LocationSummary>";
+xml_variables = xml_variables + "</JobPositionLocation>";
+xml_variables = xml_variables + "<Classification>";
+xml_variables = xml_variables + "<Schedule>" + schedule;
+xml_variables = xml_variables + "<SummaryText>" + job_type_summary + "</SummaryText>";
+xml_variables = xml_variables + "</Schedule>";
+xml_variables = xml_variables + "<Duration><Regular/>";
+xml_variables = xml_variables + "<SummaryText>" + duration_text + "</SummaryText>";
+xml_variables = xml_variables + "</Duration>";
+xml_variables = xml_variables + "</Classification>";
+xml_variables = xml_variables + "<CompensationDescription>";
+xml_variables = xml_variables + "<Pay>";
+xml_variables = xml_variables + "<SalaryMonthly currency=\"" + salary_currency + "\">" + salary_monthly + "</SalaryMonthly>";
+xml_variables = xml_variables + "</Pay>";
+xml_variables = xml_variables + "<SummaryText>" + salary_text + "</SummaryText>";
+xml_variables = xml_variables + "</CompensationDescription>";
+xml_variables = xml_variables + "</JobPositionDescription>";
+xml_variables = xml_variables + "<JobPositionRequirements>";
+xml_variables = xml_variables + "<QualificationsRequired><Qualification type=\"experience\" yearsOfExperience=\"" + years_of_experince + "\"/></QualificationsRequired>";
+xml_variables = xml_variables + "<SummaryText>" + job_requirements + "</SummaryText>";
+xml_variables = xml_variables + "</JobPositionRequirements>";
+xml_variables = xml_variables + "</JobPositionInformation>";
+xml_variables = xml_variables + "<HowToApply distribute=\"external\">";
+xml_variables = xml_variables + "<ApplicationMethods>";
+xml_variables = xml_variables + "<ByWeb>";
+xml_variables = xml_variables + "<URL>" + application_url + "</URL>";
+xml_variables = xml_variables + "</ByWeb>";
+xml_variables = xml_variables + "</ApplicationMethods>";
+xml_variables = xml_variables + "</HowToApply>";
+xml_variables = xml_variables + "<NumberToFill>" + no_of_positions + "</NumberToFill>";
+xml_variables = xml_variables + "<JPPExtension>";
+xml_variables = xml_variables + "<InformationContact>";
+xml_variables = xml_variables + "<Contact>";
+xml_variables = xml_variables + "<PersonName>";
+xml_variables = xml_variables + "<FormattedName>" + contact_formatted_name + "</FormattedName>";
+xml_variables = xml_variables + "</PersonName>";
+xml_variables = xml_variables + "<E-mail>" + contact_email + "</E-mail>";
+xml_variables = xml_variables + "</Contact>";
+xml_variables = xml_variables + "</InformationContact><OccupationGroup codename=\"OccupationNameID\" code=\"" + occupation_id + "\"/>";
+xml_variables = xml_variables + "<LastDateApplication>";
+xml_variables = xml_variables + "<Date>" + last_date_application + "</Date>";
+xml_variables = xml_variables + "</LastDateApplication>";
+xml_variables = xml_variables + "<ApplicationReferenceId>" + application_reference + "</ApplicationReferenceId>";
+xml_variables = xml_variables + "</JPPExtension>";
+xml_variables = xml_variables + "</JobPositionPosting>";
+xml_variables = xml_variables + "</Payload>";
+xml_variables = xml_variables + "</Packet>";
+xml_variables = xml_variables + "</Envelope>";
+//Api Call
+//info xml_variables;
+//make the request
+xml_request = postUrl("https://api.arbetsformedlingen.se/ledigtarbete/apiledigtarbete/hrxml",xml_variables,false);
+api_response = xml_request.get("responseText");
+if(api_response.notContains("Inskickade platsannonser har hanterats"))
+{
+	combined_string = "Job Publish Fail Due To Input Error(s) ";
+	for each  error in api_response
+	{
+		error_message = error.get("Message");
+		error_message = error_message.getPrefix("(");
+		combined_string = combined_string + " - " + error_message;
+	}
+	api_response = combined_string;
+}
+info api_response;
+//update job
+update_recruit = zoho.recruit.updateRecord("JobOpenings",ID,{"Api Return":api_response,"Platsbanken Job Last Update":now});
